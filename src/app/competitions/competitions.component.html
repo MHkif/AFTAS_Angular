@@ -1,0 +1,291 @@
+<ng-container
+  *ngIf="competitions | async as listCompetitions; else failureOrLoading"
+>
+  <section class="w-full flex flex-col gap-4 pt-2 pb-6 px-10">
+    <div class="pt-4 overflow-hidden rounded shadow-lg">
+      <div class="h-full overflow-auto">
+        <table class="w-full">
+          <thead>
+            <tr
+              class="text-sm font-semibold tracking-wide text-left text-white bg-rose-600 rounded uppercase border-b border-gray-600"
+            >
+              <th class="py-4 px-6">Code</th>
+              <th class="py-4 px-6">Date</th>
+              <th class="py-4 px-6">Start</th>
+              <th class="py-4 px-6">End</th>
+              <th class="py-4 px-6">Participants</th>
+              <th class="py-4 px-6">Location</th>
+              <th class="py-4 px-6">Status</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white">
+            <tr
+              *ngFor="let comp of listCompetitions.content"
+              class="text-gray-700"
+            >
+              <td class="px-4 py-3 text-sm font-semibold border">
+                <a [routerLink]="['/admin/competitions', comp.code]">
+                  {{ comp.code }}
+                </a>
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ comp.date }}
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ comp.startTime }}
+              </td>
+              <td class="px-4 py-3 text-sm border">
+                {{ comp.endTime }}
+              </td>
+              <td class="px-4 py-3 text-sm border flex justify-between">
+                {{ comp.numberOfParticipants }}
+                <a
+                  type="button"
+                  type="button"
+                  (click)="toggleModal()"
+                  class="flex items-center justify-center p-2 text-sm tracking-wide text-white capitalize cursor-pointer transition-colors duration-200 transform bg-rose-600 rounded-md dark:bg-rose-600 dark:hover:bg-rose-700 dark:focus:bg-rose-700 hover:bg-rose-600 focus:outline-none focus:bg-rose-500 focus:ring focus:ring-rose-300 focus:ring-opacity-50"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-3 h-3"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </a>
+
+                <div
+                  *ngIf="showModal"
+                  class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
+                >
+                  <div class="relative w-auto my-6 mx-auto max-w-2xl">
+                    <!--content-->
+                    <div
+                      class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
+                    >
+                      <!--header-->
+                      <div
+                        class="flex items-start justify-between px-5 py-3 border-b border-solid border-blueGray-200 rounded-t"
+                      >
+                        <h3 class="text-xl font-semibold">Register Member</h3>
+                        <button
+                          class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                          (click)="toggleModal()"
+                        >
+                          <span
+                            class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none"
+                          >
+                            ×
+                          </span>
+                        </button>
+                      </div>
+                      <!--body-->
+                      <form
+                        [formGroup]="memberForm"
+                        id="registerMember"
+                        class="relative p-6 flex-auto"
+                      >
+                        <div class="flex justify-between gap-4">
+                          <div class="mt-4">
+                            <label
+                              for="identityDocument"
+                              class="block text-md text-gray-700 capitalize dark:text-gray-200"
+                              >Identity Document</label
+                            >
+                            <input
+                              required
+                              formControlName="identityDocument"
+                              name="identityDocument"
+                              type="text"
+                              class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                            />
+                          </div>
+
+                          <div class="mt-4">
+                            <label
+                              for="identityNumber"
+                              class="block text-md text-gray-700 capitalize dark:text-gray-200"
+                              >Identity</label
+                            >
+                            <input
+                              required
+                              formControlName="identityNumber"
+                              name="identityNumber"
+                              type="text"
+                              class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                            />
+                          </div>
+                        </div>
+                        <div
+                          *ngIf="checkMember"
+                          class="flex justify-between gap-4"
+                        >
+                          <div class="mt-4">
+                            <label
+                              for="familtyName"
+                              class="block text-md text-gray-700 capitalize dark:text-gray-200"
+                              >Familty Name</label
+                            >
+                            <input
+                              required
+                              formControlName="familtyName"
+                              name="familtyName"
+                              type="text"
+                              class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                            />
+                          </div>
+
+                          <div class="mt-4">
+                            <label
+                              for="name"
+                              class="block text-md text-gray-700 capitalize dark:text-gray-200"
+                              >Name</label
+                            >
+                            <input
+                              required
+                              formControlName="name"
+                              name="name"
+                              type="text"
+                              class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                            />
+                          </div>
+                        </div>
+                        <div *ngIf="checkMember" class="mt-4">
+                          <label
+                            for="nationality"
+                            class="block text-md text-gray-700 capitalize dark:text-gray-200"
+                            >Nationality</label
+                          >
+                          <input
+                            required
+                            formControlName="nationality"
+                            name="nationality"
+                            type="text"
+                            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                          />
+                        </div>
+                      </form>
+                      <div
+                        class="flex items-center justify-end p-4 border-t border-solid border-blueGray-200 rounded-b"
+                      >
+                        <button
+                          class="text-red-500 background-transparent font-medium px-4 py-1 text-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          type="button"
+                          (click)="toggleModal()"
+                        >
+                          Close
+                        </button>
+                        <button
+                          class="bg-emerald-500 text-white active:bg-emerald-600 font-medium text-md px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          type="button"
+                          (click)="
+                            checkMember
+                              ? handleNewMember(comp.code)
+                              : onSubmit(comp.code)
+                          "
+                        >
+                          {{ checkMember ? "Create" : "Save" }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  *ngIf="showModal"
+                  class="opacity-25 fixed inset-0 z-40 bg-black"
+                ></div>
+              </td>
+              <td class="px-4 py-3 text-sm border">
+                {{ comp.location }}
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ comp.status }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <ng-container *ngIf="listCompetitions.totalPages">
+    <ul class="py-3 flex justify-center text-xs font-medium space-x-1">
+      <li *ngIf="!listCompetitions.first">
+        <a
+          (click)="navigateToAdminCompetitions(currentPage - 1)"
+          class="inline-flex items-center justify-center w-8 h-8 border border-gray-100 rounded cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-3 h-3"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </a>
+      </li>
+
+      <li
+        *ngFor="let page of getTotalPagesArray(listCompetitions); let i = index"
+      >
+        <a
+          [ngClass]="{
+            'bg-rose-600 border border-rose-600 text-white ':
+              page == currentPage
+          }"
+          class="block w-8 h-8 text-center border border-gray-100 rounded leading-8 cursor-pointer"
+          (click)="navigateToAdminCompetitions(this.page)"
+        >
+          {{ page }}
+        </a>
+      </li>
+
+      <li *ngIf="!listCompetitions.last">
+        <a
+          (click)="
+            navigateToAdminCompetitions(
+              listCompetitions.pageable.pageNumber + 2
+            )
+          "
+          class="inline-flex items-center justify-center w-8 h-8 border border-gray-100 rounded cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-3 h-3"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </ng-container>
+</ng-container>
+
+<ng-template
+  #failureOrLoading
+  class="text-md font-semibold leading-relaxed text-red-600 md:text-xl"
+>
+  <ng-container *ngIf="errorMsg; else loading">
+    <div class="text-md font-semibold leading-relaxed text-red-600 md:text-lg">
+      {{ errorMsg }}
+    </div>
+  </ng-container>
+
+  <ng-template #loading> Loading .... </ng-template>
+</ng-template>

@@ -1,0 +1,293 @@
+<ng-container *ngIf="competition; else failureOrLoading">
+  <section class="w-full flex flex-col gap-4 py-6 px-10">
+    <h1 class="text-xl font-semibold leading-relaxed text-gray-800 text-center">
+      Competition : {{ competition.code }}
+    </h1>
+    <div class="pt-4 overflow-hidden rounded shadow-lg">
+      <div class="h-full overflow-auto rounded">
+        <table class="w-full">
+          <thead>
+            <tr
+              class="text-sm font-semibold tracking-wide text-left text-white bg-rose-600 rounded uppercase border-b border-gray-600"
+            >
+              <th class="py-4 px-6">Code</th>
+              <th class="py-4 px-6">Date</th>
+              <th class="py-4 px-6">Start</th>
+              <th class="py-4 px-6">End</th>
+              <th class="py-4 px-6">Participants</th>
+              <th class="py-4 px-6">Location</th>
+              <th class="py-4 px-6">Status</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white">
+            <tr class="text-gray-700">
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ competition.code }}
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ competition.date }}
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ competition.startTime }}
+              </td>
+              <td class="px-4 py-3 text-sm border">
+                {{ competition.endTime }}
+              </td>
+              <td class="px-4 py-3 text-sm border flex justify-between">
+                {{ competition.numberOfParticipants }}
+              </td>
+              <td class="px-4 py-3 text-sm border">
+                {{ competition.location }}
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ competition.status }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!--  -->
+  <!-- Rankings -->
+  <!--  -->
+  <section
+    *ngIf="rankings | async as listRankings"
+    class="w-full flex flex-col gap-4 pt-2 pb-6 px-10"
+  >
+    <h1 class="text-md font-semibold leading-relaxed text-gray-800 md:text-xl">
+      Participants
+    </h1>
+    <div class="pt-2 overflow-hidden rounded shadow-lg">
+      <div class="h-full overflow-auto rounded-t">
+        <table class="w-full">
+          <thead>
+            <tr
+              class="text-sm font-semibold tracking-wide text-left text-white bg-rose-600 rounded uppercase border-b border-gray-600"
+            >
+              <!-- <th class="py-4 px-6">Rank</th> -->
+              <th class="py-4 px-6">Name</th>
+              <th class="py-4 px-6">Familty Name</th>
+              <th class="py-4 px-6">Nationality</th>
+              <th class="py-4 px-6">Score</th>
+              <th class="py-4 px-6">Hunting</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white">
+            <tr *ngFor="let participant of listRankings" class="text-gray-700">
+              <!-- <td class="px-4 py-3 text-sm font-semibold border">
+                {{ participant.rank }}
+              </td> -->
+
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ participant.member.name }}
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ participant.member.familtyName }}
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ participant.member.nationality }}
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ participant.score }}
+              </td>
+              <td class="px-4 py-3 text-sm border">
+                <a
+                  type="button"
+                  type="button"
+                  (click)="toggleModal()"
+                  class="flex items-center justify-center p-2 text-sm w-10 text-center tracking-wide text-white capitalize cursor-pointer transition-colors duration-200 transform bg-rose-600 rounded-md dark:bg-rose-600 dark:hover:bg-rose-700 dark:focus:bg-rose-700 hover:bg-rose-600 focus:outline-none focus:bg-rose-500 focus:ring focus:ring-rose-300 focus:ring-opacity-50"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-3 h-3"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </a>
+
+                <div
+                  *ngIf="showModal"
+                  class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
+                >
+                  <div class="relative w-auto my-6 mx-auto max-w-2xl">
+                    <!--content-->
+                    <div
+                      class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
+                    >
+                      <!--header-->
+                      <div
+                        class="flex items-start justify-between px-5 py-3 border-b border-solid border-blueGray-200 rounded-t"
+                      >
+                        <h3 class="text-xl font-semibold">Hunting</h3>
+                        <button
+                          class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                          (click)="toggleModal()"
+                        >
+                          <span
+                            class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none"
+                          >
+                            ×
+                          </span>
+                        </button>
+                      </div>
+                      <!--body-->
+                      <form
+                        [formGroup]="huntingForm"
+                        id="hunting"
+                        class="relative p-6 flex-auto"
+                      >
+                        <div class="flex justify-between gap-4">
+                          <div class="mt-4">
+                            <label
+                              for="fish"
+                              class="block text-md text-gray-700 capitalize dark:text-gray-200"
+                              >Fish</label
+                            >
+                            <div *ngIf="fishes | async as listFishes">
+                              <select
+                                required
+                                formControlName="name"
+                                name="name"
+                                id="fish"
+                                class="block w-full px-3 py-2 mt-3 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+                                aria-placeholder="fish"
+                                aria-label="select a fish"
+                              >
+                                <option
+                                  *ngFor="let f of listFishes.content"
+                                  value="{{ f.name}}"
+                                >
+                                  {{ f.name }}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="mt-4">
+                            <label
+                              for="numberofFish"
+                              class="block text-md text-gray-700 capitalize dark:text-gray-200"
+                              >Number Of Fish</label
+                            >
+                            <input
+                              required
+                              formControlName="numberofFish"
+                              name="numberofFish"
+                              type="text"
+                              class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+                            />
+                          </div>
+                        </div>
+                      </form>
+                      <div
+                        class="flex items-center justify-end p-4 border-t border-solid border-blueGray-200 rounded-b"
+                      >
+                        <button
+                          class="text-red-500 background-transparent font-medium px-4 py-1 text-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          type="button"
+                          (click)="toggleModal()"
+                        >
+                          Close
+                        </button>
+                        <button
+                          class="bg-emerald-500 text-white active:bg-emerald-600 font-medium text-md px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          type="button"
+                          (click)="onHunting(participant.competition.code, participant.member.num)"
+                        >
+                          Apply
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  *ngIf="showModal"
+                  class="opacity-25 fixed inset-0 z-40 bg-black"
+                ></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Podium -->
+  <!--  -->
+  <section
+    *ngIf="rankings | async as listRankings"
+    class="w-full flex flex-col gap-4 pt-2 pb-6 px-10"
+  >
+    <h1 class="text-md font-semibold leading-relaxed text-gray-800 md:text-xl">
+      Podium
+    </h1>
+    <div class="pt-2 overflow-hidden rounded shadow-lg">
+      <div class="h-full overflow-auto rounded-t">
+        <table class="w-full">
+          <thead>
+            <tr
+              class="text-sm font-semibold tracking-wide text-left text-white bg-rose-600 rounded uppercase border-b border-gray-600"
+            >
+              <th class="py-4 px-6">Rank</th>
+              <th class="py-4 px-6">Name</th>
+              <th class="py-4 px-6">Familty Name</th>
+              <th class="py-4 px-6">Nationality</th>
+              <th class="py-4 px-6">Score</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white">
+            <tr
+              *ngFor="let participant of listRankings | slice : 0 : 3"
+              class="text-gray-700"
+            >
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ participant.rank }}
+              </td>
+
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ participant.member.name }}
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ participant.member.familtyName }}
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ participant.member.nationality }}
+              </td>
+              <td class="px-4 py-3 text-sm font-semibold border">
+                {{ participant.score }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template
+  #failureOrLoading
+  class="text-md font-semibold leading-relaxed text-red-600 md:text-xl"
+>
+  <ng-container
+    class="w-full h-full text-center m-auto pt-8"
+    *ngIf="errorMsg; else loading"
+  >
+    <div class="text-md font-semibold leading-relaxed text-red-600 md:text-lg">
+      {{ errorMsg }}
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <section class="w-full h-full text-center m-auto pt-8">
+      Loading ....
+    </section>
+  </ng-template>
+</ng-template>
