@@ -3,7 +3,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Competition } from '../models/competition.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompetitionService } from '../services/competition/competition-service.service';
-import { Member } from '../models/member.model';
+import { User } from '../models/user.model';
 import { RankingService } from '../services/ranking/ranking.service';
 import { Ranking, RankingRes } from '../models/ranking.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -17,7 +17,7 @@ import { Fish, PageFish } from '../models/fish.model';
 export class CompetitionComponent implements OnInit {
   code!: string;
   competition!: Competition;
-  participants!: Array<Member>;
+  participants!: Array<User>;
   errorMsg!: string;
   rankings!: Observable<Array<RankingRes>>;
   showModal = false;

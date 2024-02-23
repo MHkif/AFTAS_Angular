@@ -81,10 +81,10 @@
               </td> -->
 
               <td class="px-4 py-3 text-sm font-semibold border">
-                {{ participant.member.name }}
+                {{ participant.member.first_name }}
               </td>
               <td class="px-4 py-3 text-sm font-semibold border">
-                {{ participant.member.familtyName }}
+                {{ participant.member.last_name }}
               </td>
               <td class="px-4 py-3 text-sm font-semibold border">
                 {{ participant.member.nationality }}
@@ -163,7 +163,7 @@
                               >
                                 <option
                                   *ngFor="let f of listFishes.content"
-                                  value="{{ f.name}}"
+                                  value="{{ f.name }}"
                                 >
                                   {{ f.name }}
                                 </option>
@@ -200,7 +200,12 @@
                         <button
                           class="bg-emerald-500 text-white active:bg-emerald-600 font-medium text-md px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="button"
-                          (click)="onHunting(participant.competition.code, participant.member.num)"
+                          (click)="
+                            onHunting(
+                              participant.competition.code,
+                              participant.member.num
+                            )
+                          "
                         >
                           Apply
                         </button>
@@ -253,10 +258,10 @@
               </td>
 
               <td class="px-4 py-3 text-sm font-semibold border">
-                {{ participant.member.name }}
+                {{ participant.member.first_name }}
               </td>
               <td class="px-4 py-3 text-sm font-semibold border">
-                {{ participant.member.familtyName }}
+                {{ participant.member.last_name }}
               </td>
               <td class="px-4 py-3 text-sm font-semibold border">
                 {{ participant.member.nationality }}

@@ -4,8 +4,8 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { CompetitionService } from '../services/competition/competition-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MemberService } from '../services/memeber/member.service';
-import { Member } from '../models/member.model';
+import { UserService } from '../services/memeber/user.service';
+import { User } from '../models/user.model';
 import { RankingService } from '../services/ranking/ranking.service';
 import { Ranking } from '../models/ranking.model';
 
@@ -28,8 +28,8 @@ export class CompetitionsComponent implements OnInit {
     private fb: FormBuilder,
     private service: CompetitionService,
     private route: ActivatedRoute,
-    private router:Router,
-    private memberService: MemberService,
+    private router: Router,
+    private userService: UserService,
     private rankingService: RankingService
   ) {}
 
@@ -48,7 +48,7 @@ export class CompetitionsComponent implements OnInit {
     });
   }
 
-  handleExistingMember(member: Member, competitionCode: string): void {
+  handleExistingMember(member: User, competitionCode: string): void {
     console.log('Member:', member);
 
     const ranking = {
@@ -90,21 +90,21 @@ export class CompetitionsComponent implements OnInit {
       nationality: this.memberForm.value.nationality,
     };
 
-    this.memberService.save(member).subscribe({
-      next: (memberRes: Member) => {
+    this.userService.save(member).subscribe({
+      next: (userRes) => {
         alert('Member saved successfully!');
-        alert(JSON.stringify(memberRes));
+        alert(JSON.stringify(userRes));
 
         const ranking = {
           id: {
             competitionCode: competitionCode,
-            memberId: memberRes.num,
+            memberId: userRes.data.num,
           },
           competition: {
             code: competitionCode,
           },
           member: {
-            num: memberRes.num,
+            num: userRes.data.num,
           },
           rank: 0,
           score: 0,
@@ -131,10 +131,10 @@ export class CompetitionsComponent implements OnInit {
 
   // Modify onSubmit function to use the separated logic
   onSubmit(competitionCode: string): void {
-    this.memberService
+    this.userService
       .checkMember(this.memberForm.value.identityNumber)
       .subscribe({
-        next: (member: Member) => {
+        next: (member: User) => {
           this.handleExistingMember(member, competitionCode);
         },
         error: (error) => {
@@ -168,7 +168,7 @@ export class CompetitionsComponent implements OnInit {
     this.showModal = !this.showModal;
   }
 
-  navigateToAdminCompetitions(page:any): void {
+  navigateToAdminCompetitions(page: any): void {
     const queryParams = { page: page }; // Assuming this.page is your parameter value
     this.router.navigate(['admin/competitions'], { queryParams: queryParams });
   }

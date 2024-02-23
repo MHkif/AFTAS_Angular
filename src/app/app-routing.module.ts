@@ -1,20 +1,35 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CompetitionsComponent } from './competitions/competitions.component';
-import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { CreateCompetitionComponent } from './create-competition/create-competition.component';
 import { CompetitionComponent } from './competition/competition.component';
+import { LoginComponent } from './shared/members/auth/login/login.component';
+import { RegisterComponent } from './shared/members/auth/register/register.component';
+import { AuthGuard } from './guards/users/auth.guard';
 
 const routes: Routes = [
   {
-    path: 'admin/competitions',
+    path: 'auth',
+    children: [
+      {
+        path: 'login',
+        component: LoginComponent,
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
+      },
+    ],
+  },
+  {
+    path: 'competitions',
     component: HomeComponent,
+    canActivate: [AuthGuard],
   },
 
   {
     path: '',
-    redirectTo: 'admin/competitions',
+    redirectTo: 'competitions',
     pathMatch: 'full',
   },
   {
