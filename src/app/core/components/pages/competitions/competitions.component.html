@@ -1,0 +1,142 @@
+<main-layout>
+  <div main-content class="w-full h-full py-6">
+    <!-- All Coming Competitions -->
+    <section
+      id="competitions"
+      class="flex flex-col h-full justify-center items-center px-6 md:px-8 h-full"
+      style="font-family: 'Prosto One', cursive"
+    >
+      <h1
+        class="max-w-md text-1xl font-bold text-center text-white my-6 md:text-3xl md:my-8"
+      >
+        Coming Competitions
+      </h1>
+      <ng-container *ngIf="competitions.content; else NoCompetitions">
+        <div
+          class="grid grid-cols-1 gap-4 w-full md:grid-cols-2 lg:grid-cols-4 items-center justify-center"
+        >
+          <div
+            *ngFor="let comp of competitions.content"
+            class="w-full h-44 xl:h-64 mb-4 sm:mb-0 md:mb-4 rounded"
+          >
+            <div
+              class="relative overflow-hidden w-full rounded h-full bg-no-repeat bg-center bg-cover"
+              style="background-image: url('./assets/main/hero.png')"
+            >
+              <div
+                class="backdrop-grayscale-0 bg-black/60 absolute top-0 right-0 bottom-0 left-0 w-full h-full overflow-hidden rounded border border-green-900 bg-fixed flex flex-col justify-center gap-4"
+              >
+                <div class="">
+                  <p class="text-center text-white text-xs md:text-sm">
+                    <span class="font-bold text-green-500">{{
+                      comp.numberOfParticipants
+                    }}</span>
+                    members
+                  </p>
+                  <p
+                    class="text-center text-white text-md font-bold md:text-xl"
+                  >
+                    In {{ comp.location }}
+                  </p>
+                  <p
+                    class="text-center text-white text-xs font-extralight md:text-sm"
+                  >
+                    {{ comp.date }}
+                  </p>
+                  <p
+                    class="text-center text-white text-xs font-extralight md:text-sm"
+                  >
+                    {{ comp.startTime }} | {{ comp.endTime }}
+                  </p>
+                </div>
+                <div class="flex space-x-2 justify-center">
+                  <button
+                    type="button"
+                    class="inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-900 hover:shadow-lg ring-1 ring-green-600 transition duration-150 ease-in-out"
+                  >
+                    Join
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="competitions.totalPages">
+          <ul
+            class="py-3 flex justify-center text-xs font-medium space-x-1 mt-10"
+          >
+            <li *ngIf="!competitions.first">
+              <a
+                (click)="navigateToAdminCompetitions(currentPage - 1)"
+                class="inline-flex items-center justify-center w-8 h-8 border border-gray-100 rounded cursor-pointer"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-3 h-3"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </a>
+            </li>
+
+            <li
+              *ngFor="
+                let page of getTotalPagesArray(competitions);
+                let i = index
+              "
+            >
+              <a
+                [ngClass]="{
+                  ' text-center bg-green-600  font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-900 hover:shadow-lg ring-1 ring-green-600 transition duration-150 ease-in-out':
+                    page == currentPage
+                }"
+                class="inline-block p-2.5 bg-gray-900 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg ring-1 ring-green-600 transition duration-150 ease-in-out"
+                (click)="navigateToAdminCompetitions(this.page)"
+              >
+                {{ page }}
+              </a>
+            </li>
+
+            <li *ngIf="!competitions.last">
+              <a
+                (click)="
+                  navigateToAdminCompetitions(
+                    competitions.pageable.pageNumber + 2
+                  )
+                "
+                class="inline-block p-2.5 bg-gray-900 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg ring-1 ring-green-600 transition duration-150 ease-in-out"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-3 h-3"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </ng-container>
+      </ng-container>
+
+      <ng-template #NoCompetitions>
+        <h1
+          class="max-w-md text-1xl font-bold text-center text-green-600 my-6 md:text-3xl md:my-8"
+        >
+          There no competitions
+        </h1>
+      </ng-template>
+    </section>
+  </div>
+</main-layout>

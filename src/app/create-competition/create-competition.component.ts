@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CompetitionService } from '../services/competition/competition-service.service';
 import {  Router } from '@angular/router';
+import { CompetitionService } from '../core/services/competition/competition-service.service';
 
 
 @Component({
